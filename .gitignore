@@ -1,0 +1,15 @@
+node_modules/
+
+# Runtime-generated state (Roon pairing config, render cache)
+runtime/
+
+# Legacy root-level artifacts (migrated to runtime/ on first run)
+config.json
+tmp/
+
+# Local configuration overrides (contain secrets)
+.env
+local-settings.json
+
+# macOS metadata
+.DS_Store

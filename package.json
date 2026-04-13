@@ -1,0 +1,50 @@
+{
+    "name": "roon-extension-tidbyt",
+    "version": "1.0.0",
+    "description": "Roon extension that pushes Now Playing information to a Tidbyt display in real time",
+    "main": "src/index.js",
+    "bin": {
+        "roon-tidbyt": "bin/roon-tidbyt.js"
+    },
+    "scripts": {
+        "start": "node src/index.js",
+        "doctor": "node scripts/doctor.js"
+    },
+    "files": [
+        "bin/",
+        "pixlet/",
+        "scripts/",
+        "src/",
+        ".env.example",
+        "ecosystem.config.cjs",
+        "local-settings.example.json"
+    ],
+    "engines": {
+        "node": ">=18"
+    },
+    "keywords": [
+        "roon",
+        "tidbyt",
+        "now-playing",
+        "roon-extension",
+        "pixlet",
+        "smart-display"
+    ],
+    "author": "ndhotsky",
+    "license": "Apache-2.0",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/ndhotsky/roon-extension-tidbyt.git"
+    },
+    "homepage": "https://github.com/ndhotsky/roon-extension-tidbyt#readme",
+    "bugs": {
+        "url": "https://github.com/ndhotsky/roon-extension-tidbyt/issues"
+    },
+    "dependencies": {
+        "node-roon-api": "github:roonlabs/node-roon-api",
+        "node-roon-api-image": "github:roonlabs/node-roon-api-image",
+        "node-roon-api-settings": "github:roonlabs/node-roon-api-settings",
+        "node-roon-api-status": "github:roonlabs/node-roon-api-status",
+        "node-roon-api-transport": "github:roonlabs/node-roon-api-transport"
+    }
+}
