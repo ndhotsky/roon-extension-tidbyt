@@ -175,6 +175,9 @@ Album art requires a Roon Core that exposes `RoonApiImage`. Verify in the extens
 **Push fails with a Pixlet error**
 Run `npm run doctor` to confirm Pixlet is accessible, then inspect the error in the extension logs for details on the render or push step.
 
+**Push failed: spawn E2BIG**
+This can happen if Roon returns very large original album art and the encoded image is too large for Pixlet's render command-line arguments. The extension requests display-sized artwork and skips oversized artwork to keep pushes reliable.
+
 ---
 
 ## License
