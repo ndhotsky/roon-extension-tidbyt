@@ -140,6 +140,36 @@ pm2 restart roon-extension-tidbyt
 pm2 stop roon-extension-tidbyt
 ```
 
+#### PM2 logs and disk space
+
+PM2 writes stdout and stderr under `~/.pm2/logs/`. On an always-on host those files grow until something rotates or clears them.
+
+**Rotate logs (recommended):** install the [pm2-logrotate](https://github.com/keymetrics/pm2-logrotate) module:
+
+```bash
+pm2 install pm2-logrotate
+```
+
+Example tuning (sizes and retention are up to you):
+
+```bash
+pm2 set pm2-logrotate:max_size 10M
+pm2 set pm2-logrotate:retain 7
+pm2 set pm2-logrotate:compress true
+```
+
+**Clear logs once:** reclaim disk without removing the process:
+
+```bash
+pm2 flush
+```
+
+You can also truncate a single file, for example:
+
+```bash
+: > ~/.pm2/logs/roon-extension-tidbyt-out-0.log
+```
+
 ---
 
 ## Health check
