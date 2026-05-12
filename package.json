@@ -1,6 +1,6 @@
 {
     "name": "roon-extension-tidbyt",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Roon extension that pushes Now Playing information to a Tidbyt display in real time",
     "main": "src/index.js",
     "bin": {
