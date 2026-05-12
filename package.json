@@ -8,7 +8,8 @@
     },
     "scripts": {
         "start": "node src/index.js",
-        "doctor": "node scripts/doctor.js"
+        "doctor": "node scripts/doctor.js",
+        "test": "node --test"
     },
     "files": [
         "bin/",
