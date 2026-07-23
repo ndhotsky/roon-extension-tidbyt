@@ -142,32 +142,29 @@ pm2 stop roon-extension-tidbyt
 
 #### PM2 logs and disk space
 
-PM2 writes stdout and stderr under `~/.pm2/logs/`. On an always-on host those files grow until something rotates or clears them.
+PM2 writes stdout and stderr under `$HOME/.pm2/logs` (typically `~/.pm2/logs/`). There is no built-in size cap: on an always-on host those files grow until something rotates or clears them. Official PM2 guidance is to install [pm2-logrotate](https://github.com/keymetrics/pm2-logrotate) (configure docs: [pm2-hive/pm2-logrotate](https://github.com/pm2-hive/pm2-logrotate#configure)).
 
-**Rotate logs (recommended):** install the [pm2-logrotate](https://github.com/keymetrics/pm2-logrotate) module:
+**Rotate logs (recommended):**
 
 ```bash
 pm2 install pm2-logrotate
 ```
 
-Example tuning (sizes and retention are up to you):
+Defaults after install are already useful (`max_size` `10M`, `retain` `30`, daily `rotateInterval`, `compress` off). Optional overrides:
 
 ```bash
-pm2 set pm2-logrotate:max_size 10M
 pm2 set pm2-logrotate:retain 7
 pm2 set pm2-logrotate:compress true
+pm2 conf pm2-logrotate   # inspect current module settings
 ```
 
-**Clear logs once:** reclaim disk without removing the process:
+On Linux hosts with root access, an alternative is the OS logrotate config PM2 can install: `sudo pm2 logrotate -u "$USER"`.
+
+**Clear logs once:** reclaim disk without stopping the process:
 
 ```bash
-pm2 flush
-```
-
-You can also truncate a single file, for example:
-
-```bash
-: > ~/.pm2/logs/roon-extension-tidbyt-out-0.log
+pm2 flush roon-extension-tidbyt   # this app only
+pm2 flush                         # all PM2-managed apps
 ```
 
 ---
