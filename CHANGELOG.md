@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Documentation
+
+- README: PM2 log rotation (`pm2-logrotate` / optional `pm2 logrotate`), defaults, and `pm2 flush` cleanup
+
 ## [1.0.0] — 2026-04-12
 
 ### Added
