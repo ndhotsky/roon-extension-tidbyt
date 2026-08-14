@@ -1,19 +1,14 @@
 const fs = require("fs");
-const path = require("path");
 const { spawn } = require("child_process");
 const defaults = require("../../config/defaults");
-
-function ensureRuntimeDirs(renderOutputPath) {
-    fs.mkdirSync(path.dirname(renderOutputPath), { recursive: true });
-}
 
 function renderAndPush(input) {
     const {
         snapshot,
         settingsState,
-        pixletPath,
-        renderOutputPath,
-        workingDirectory,
+        pixletPath = defaults.PIXLET_APP_PATH,
+        renderOutputPath = defaults.RENDER_OUTPUT_PATH,
+        workingDirectory = defaults.PROJECT_ROOT,
     } = input;
 
     if (!fs.existsSync(pixletPath)) {
@@ -74,4 +69,4 @@ function runCommand(command, args, timeoutMs, workingDirectory) {
     });
 }
 
-module.exports = { ensureRuntimeDirs, renderAndPush };
+module.exports = { renderAndPush };

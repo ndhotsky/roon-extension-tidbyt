@@ -23,7 +23,7 @@ function fetchAlbumArtBase64(imageKey) {
             }
             try {
                 const buf = Buffer.isBuffer(body) ? body : Buffer.from(body, "binary");
-                const encoded = _toUrlSafeBase64(buf.toString("base64"));
+                const encoded = buf.toString("base64url");
                 if (encoded.length > MAX_ARTWORK_B64_LENGTH) {
                     console.warn(
                         "Skipping album art for key %s: encoded image is too large for Pixlet render args",
@@ -39,10 +39,6 @@ function fetchAlbumArtBase64(imageKey) {
             }
         });
     });
-}
-
-function _toUrlSafeBase64(value) {
-    return value.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
 }
 
 module.exports = { fetchAlbumArtBase64 };

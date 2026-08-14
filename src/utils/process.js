@@ -1,13 +1,14 @@
 const fs = require("fs");
+const path = require("path");
 const { spawnSync } = require("child_process");
-const { RUNTIME_DIR } = require("../config/defaults");
+const { RUNTIME_DIR, RENDER_OUTPUT_PATH } = require("../config/defaults");
 
 /**
  * Ensures the process CWD is runtime/ so Roon writes config.json there instead of
  * the source tree.
  */
 function ensureProcessWorkingDirectory() {
-    fs.mkdirSync(RUNTIME_DIR, { recursive: true });
+    fs.mkdirSync(path.dirname(RENDER_OUTPUT_PATH), { recursive: true });
 
     if (process.cwd() === RUNTIME_DIR) return;
     try {

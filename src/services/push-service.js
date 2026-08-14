@@ -1,6 +1,4 @@
 const state = require("../state");
-const defaults = require("../config/defaults");
-const settingsModel = require("../domain/settings-model");
 const snapshotDomain = require("../domain/snapshot");
 const renderer = require("../integrations/pixlet/renderer");
 const artwork = require("../integrations/pixlet/artwork");
@@ -35,7 +33,7 @@ function maybeSchedulePush() {
     state.runtime.debounceTimer = setTimeout(() => {
         state.runtime.debounceTimer = null;
         _pushPendingSnapshot();
-    }, settingsModel.parseInteger(state.settingsState.debounce_ms, defaults.DEFAULT_DEBOUNCE_MS));
+    }, state.settingsState.debounce_ms);
 }
 
 function _pushPendingSnapshot() {
@@ -51,10 +49,7 @@ function _pushPendingSnapshot() {
         return;
     }
 
-    const minIntervalMs = settingsModel.parseInteger(
-        state.settingsState.min_push_interval_sec,
-        defaults.DEFAULT_MIN_PUSH_INTERVAL_SEC
-    ) * 1000;
+    const minIntervalMs = state.settingsState.min_push_interval_sec * 1000;
     const waitMs = minIntervalMs - (Date.now() - state.runtime.lastPushAtMs);
     if (waitMs > 0) {
         state.runtime.debounceTimer = setTimeout(() => {
@@ -94,9 +89,6 @@ async function _renderAndPush(snapshot) {
     return renderer.renderAndPush({
         snapshot: enrichedSnapshot,
         settingsState: state.settingsState,
-        pixletPath: defaults.PIXLET_APP_PATH,
-        renderOutputPath: defaults.RENDER_OUTPUT_PATH,
-        workingDirectory: defaults.PROJECT_ROOT,
     });
 }
 
