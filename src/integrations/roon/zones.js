@@ -24,13 +24,6 @@ function subscribeZones() {
             if ((msg.zones_removed && msg.zones_removed.length) || (msg.zones_added && msg.zones_added.length)) {
                 _logKnownZones();
             }
-            (msg.zones_seek_changed || []).forEach((zoneSeek) => {
-                const zone = state.runtime.zonesById[zoneSeek.zone_id];
-                if (!zone) return;
-                zone.seek_position = zoneSeek.seek_position;
-                zone.queue_time_remaining = zoneSeek.queue_time_remaining;
-                if (zone.now_playing) zone.now_playing.seek_position = zoneSeek.seek_position;
-            });
         } else if (response === "Unsubscribed") {
             state.runtime.zonesById = {};
         }

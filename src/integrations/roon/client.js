@@ -42,7 +42,6 @@ function createRoonClient() {
     const svcSettings = new RoonApiSettings(roon, {
         get_settings:  settingsUi.getSettingsHandler,
         save_settings: settingsUi.saveSettingsHandler,
-        button_pressed: settingsUi.buttonPressedHandler,
     });
 
     roon.init_services({

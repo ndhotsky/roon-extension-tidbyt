@@ -1,6 +1,5 @@
 load("encoding/base64.star", "base64")
 load("render.star", "render")
-load("schema.star", "schema")
 
 ART_SIZE = 24
 TEXT_WIDTH = 39
@@ -12,15 +11,8 @@ def _safe_text(config, key, fallback = ""):
     text = str(value).strip()
     return text if text else fallback
 
-def _normalize_artwork_b64(s):
-    normalized = s.replace(" ", "").replace("\n", "").replace("\r", "").replace("\t", "")
-    for _ in range(2):
-        if normalized.endswith("="):
-            normalized = normalized[:-1]
-    return normalized
-
 def _album_art(config):
-    artwork_b64 = _normalize_artwork_b64(_safe_text(config, "artwork_b64", ""))
+    artwork_b64 = _safe_text(config, "artwork_b64", "")
     if artwork_b64:
         decoded = base64.decode(artwork_b64, encoding = "url_raw")
         if decoded:
@@ -82,46 +74,4 @@ def main(config):
                 ],
             ),
         ),
-    )
-
-def get_schema():
-    return schema.Schema(
-        version = "1",
-        fields = [
-            schema.Text(
-                id = "title",
-                name = "Title",
-                desc = "Track title",
-                icon = "music",
-                default = "Nothing Playing",
-            ),
-            schema.Text(
-                id = "subtitle",
-                name = "Subtitle",
-                desc = "Artist or secondary text",
-                icon = "user",
-                default = "",
-            ),
-            schema.Text(
-                id = "album",
-                name = "Album",
-                desc = "Album title",
-                icon = "text-width",
-                default = "",
-            ),
-            schema.Text(
-                id = "zone_name",
-                name = "Zone Name",
-                desc = "Selected Roon zone name",
-                icon = "speaker",
-                default = "",
-            ),
-            schema.Text(
-                id = "artwork_b64",
-                name = "Artwork Base64",
-                desc = "Album art bytes (base64 encoded JPEG)",
-                icon = "image",
-                default = "",
-            ),
-        ],
     )

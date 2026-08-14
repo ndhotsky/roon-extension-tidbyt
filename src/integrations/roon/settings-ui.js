@@ -44,8 +44,4 @@ function saveSettingsHandler(req, isDryRun, settings) {
     pushService.maybeSchedulePush();
 }
 
-function buttonPressedHandler(req, _buttonId, _settings) {
-    req.send_complete("Success", { settings: _buildLayout() });
-}
-
-module.exports = { init, getSettingsHandler, saveSettingsHandler, buttonPressedHandler };
+module.exports = { init, getSettingsHandler, saveSettingsHandler };
