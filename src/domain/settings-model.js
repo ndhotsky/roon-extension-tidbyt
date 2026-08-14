@@ -31,7 +31,7 @@ function resolveZoneObject(settingsState) {
     return { output_id: zoneId, zone_id: zoneId };
 }
 
-function normalizeSettings(raw, defaults) {
+function normalizeSettings(raw = {}, defaults) {
     const zoneId = raw.zone_id || extractZoneId(raw.zone);
     return {
         tidbyt_device_id: normalizeSettingString(raw.tidbyt_device_id),
@@ -43,30 +43,8 @@ function normalizeSettings(raw, defaults) {
     };
 }
 
-function applyNormalizedSettings(settingsState, rawSettings, defaults) {
-    const normalized = normalizeSettings(rawSettings, defaults);
-    settingsState.tidbyt_device_id = normalized.tidbyt_device_id;
-    settingsState.tidbyt_api_token = normalized.tidbyt_api_token;
-    settingsState.zone_id = normalized.zone_id;
-    settingsState.zone = normalized.zone;
-    settingsState.debounce_ms = normalized.debounce_ms;
-    settingsState.min_push_interval_sec = normalized.min_push_interval_sec;
-    return normalized;
-}
-
 function settingsToObject(settings) {
-    if (!settings) return {};
-
-    let raw;
-    if (!Array.isArray(settings)) {
-        if (settings.values && typeof settings.values === "object") {
-            raw = Array.isArray(settings.values) ? arrayToMap(settings.values) : settings.values;
-        } else {
-            raw = settings;
-        }
-    } else {
-        raw = arrayToMap(settings);
-    }
+    const raw = { ...(settings?.values ?? settings ?? {}) };
 
     if (raw.zone && typeof raw.zone === "object") {
         raw.zone_id = extractZoneId(raw.zone);
@@ -74,17 +52,7 @@ function settingsToObject(settings) {
     return raw;
 }
 
-function arrayToMap(arr) {
-    const mapped = {};
-    arr.forEach((entry) => {
-        if (!entry || !entry.setting) return;
-        mapped[entry.setting] = entry.value;
-    });
-    return mapped;
-}
-
-function buildSettingsLayout(input) {
-    const { settingsState } = input;
+function buildSettingsLayout(settingsState) {
     const values = {
         tidbyt_device_id: toLayoutString(settingsState.tidbyt_device_id, 256),
         tidbyt_api_token: toLayoutString(settingsState.tidbyt_api_token, 4096),
@@ -102,7 +70,6 @@ function buildSettingsLayout(input) {
 }
 
 module.exports = {
-    applyNormalizedSettings,
     buildSettingsLayout,
     normalizeSettings,
     parseInteger,

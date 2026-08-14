@@ -1,13 +1,33 @@
+const fs = require("fs");
 const state = require("../state");
 const defaults = require("./defaults");
 const settingsModel = require("../domain/settings-model");
-const { loadEnvSettings } = require("./env");
-const { loadLocalFileSettings } = require("./local-file");
 
 let _roon = null;
 
 function init(roon) {
     _roon = roon;
+}
+
+function loadEnvSettings() {
+    const settings = {};
+    if (process.env.TIDBYT_DEVICE_ID) settings.tidbyt_device_id = process.env.TIDBYT_DEVICE_ID;
+    if (process.env.TIDBYT_API_TOKEN) settings.tidbyt_api_token = process.env.TIDBYT_API_TOKEN;
+    if (process.env.ROON_ZONE_ID) settings.zone_id = process.env.ROON_ZONE_ID;
+    if (process.env.ROON_DEBOUNCE_MS) settings.debounce_ms = process.env.ROON_DEBOUNCE_MS;
+    if (process.env.ROON_MIN_PUSH_INTERVAL_SEC) settings.min_push_interval_sec = process.env.ROON_MIN_PUSH_INTERVAL_SEC;
+    return settings;
+}
+
+function loadLocalFileSettings() {
+    try {
+        if (!fs.existsSync(defaults.LOCAL_SETTINGS_PATH)) return {};
+        const parsed = JSON.parse(fs.readFileSync(defaults.LOCAL_SETTINGS_PATH, "utf8"));
+        return parsed && typeof parsed === "object" ? parsed : {};
+    } catch (error) {
+        console.error("Failed to read local-settings.json:", error.message);
+        return {};
+    }
 }
 
 /**
@@ -22,7 +42,7 @@ function loadSettings() {
         loadLocalFileSettings(),
         loadEnvSettings()
     );
-    settingsModel.applyNormalizedSettings(state.settingsState, merged, defaults.SETTINGS_DEFAULTS);
+    Object.assign(state.settingsState, settingsModel.normalizeSettings(merged, defaults));
 }
 
 function saveSettings() {

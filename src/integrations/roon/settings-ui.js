@@ -12,9 +12,7 @@ function init(svcSettings) {
 }
 
 function _buildLayout() {
-    return settingsModel.buildSettingsLayout(
-        { settingsState: state.settingsState, defaults: defaults.SETTINGS_DEFAULTS }
-    );
+    return settingsModel.buildSettingsLayout(state.settingsState);
 }
 
 function getSettingsHandler(cb) {
@@ -24,17 +22,15 @@ function getSettingsHandler(cb) {
 function saveSettingsHandler(req, isDryRun, settings) {
     const incoming = settingsModel.settingsToObject(settings);
     const merged = Object.assign({}, state.settingsState, incoming);
-    const normalized = settingsModel.normalizeSettings(merged, defaults.SETTINGS_DEFAULTS);
+    const normalized = settingsModel.normalizeSettings(merged, defaults);
 
     if (isDryRun) {
-        const previewLayout = settingsModel.buildSettingsLayout(
-            { settingsState: normalized, defaults: defaults.SETTINGS_DEFAULTS }
-        );
+        const previewLayout = settingsModel.buildSettingsLayout(normalized);
         req.send_complete("Success", { settings: previewLayout });
         return;
     }
 
-    settingsModel.applyNormalizedSettings(state.settingsState, normalized, defaults.SETTINGS_DEFAULTS);
+    Object.assign(state.settingsState, normalized);
     configStore.saveSettings();
 
     const updatedLayout = _buildLayout();
